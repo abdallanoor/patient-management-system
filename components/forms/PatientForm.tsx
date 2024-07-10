@@ -3,30 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import CustomFormField from "../CustomFormField";
+import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
-import { UserFormVakidation } from "@/lib/validation";
+import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-
-export enum FormFieldType {
-  INPUT = "input",
-  TEXTAREA = "textarea",
-  PHONE_INPUT = "phoneIput",
-  SELECT = "select",
-  CHECKBOX = "checkbox",
-  DATE_PICKER = "datePicker",
-  SKELETON = "skeleton",
-}
+import { createUser } from "@/lib/actions/paient.actions";
 
 const PatientForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const form = useForm<z.infer<typeof UserFormVakidation>>({
-    resolver: zodResolver(UserFormVakidation),
+  const form = useForm<z.infer<typeof UserFormValidation>>({
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
       name: "",
       email: "",
@@ -34,24 +23,21 @@ const PatientForm = () => {
     },
   });
 
-  function onSubmit({
+  async function onSubmit({
     name,
     email,
     phone,
-  }: z.infer<typeof UserFormVakidation>) {
+  }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
-
     try {
       const userData = { name, email, phone };
-      // const user = await createUser(userData);
-      // if (!user) router.push(`/patients/${user.$id}/register`);
-
-      console.log(userData);
+      const user = await createUser(userData);
+      if (user) router.push(`/patients/${user.$id}/register`);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-    form.reset();
   }
   return (
     <Form {...form}>

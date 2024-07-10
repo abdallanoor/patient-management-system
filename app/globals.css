@@ -8,6 +8,9 @@
 /* ========================================== TAILWIND STYLES */
 @layer base {
   /* Remove scrollbar */
+  body::-webkit-scrollbar {
+    display: none;
+  }
   .remove-scrollbar::-webkit-scrollbar {
     width: 0px;
     height: 0px;
@@ -72,7 +75,7 @@
   }
 
   .copyright {
-    @apply text-14-regular justify-items-end text-center dark:text-dark-600 xl:text-left;
+    @apply text-14-regular justify-items-end text-center dark:text-dark-600 md:text-left;
   }
 
   /* ==== SUCCESS */
@@ -202,11 +205,11 @@
   }
 
   .shad-input {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-12 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-input-icon {
-    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-11 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
+    @apply bg-dark-400 placeholder:text-dark-600 border-dark-500 h-12 focus-visible:ring-0 focus-visible:ring-offset-0 !important;
   }
 
   .shad-textArea {
@@ -218,15 +221,15 @@
   }
 
   .shad-combobox-trigger {
-    @apply h-11 !important;
+    @apply h-12 !important;
   }
 
   .shad-select-trigger {
-    @apply bg-dark-400  placeholder:text-dark-600 border-dark-500 h-11 focus:ring-0 focus:ring-offset-0 !important;
+    @apply bg-dark-400  placeholder:text-dark-600 border-dark-500 h-12 focus:ring-0 focus:ring-offset-0 !important;
   }
 
   .shad-select-content {
-    @apply bg-dark-400 border-dark-500 !important;
+    @apply bg-dark-100 border-dark-500 !important;
   }
 
   .shad-dialog {
@@ -271,12 +274,12 @@
 
   /* =====  REACT PHONE NUMBER INPUT OVERRIDES */
   .input-phone {
-    @apply mt-2 h-11 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500 !important;
+    @apply mt-2 h-12 rounded-md px-3 text-sm border bg-dark-400 placeholder:text-dark-600 border-dark-500 !important;
   }
 
   /* =====  REACT DATE PICKER OVERRIDES */
   .date-picker {
-    @apply overflow-hidden border-transparent w-full placeholder:text-dark-600  h-11 text-14-medium rounded-md px-3 outline-none !important;
+    @apply overflow-hidden border-transparent w-full placeholder:text-dark-600  h-12 text-14-medium rounded-md px-3 outline-none !important;
   }
 }
 
@@ -350,4 +353,9 @@
 
 .PhoneInputInput::placeholder {
   color: #1a1d21;
+}
+
+.custom-gradient {
+  background: linear-gradient(117.58deg, rgba(215, 237, 237, 0.16) -47.79%, rgba(204, 235, 235, 0) 100%);
+
 }
