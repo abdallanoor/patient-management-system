@@ -57,6 +57,8 @@ const config = {
         appointments: "url('/assets/images/appointments-bg.png')",
         pending: "url('/assets/images/pending-bg.png')",
         cancelled: "url('/assets/images/cancelled-bg.png')",
+        "select-gradient":
+          "linear-gradient(117.58deg, rgba(215, 237, 237, 0.16) -47.79%, rgba(204, 235, 235, 0) 100%)",
       },
       keyframes: {
         "accordion-down": {
@@ -76,6 +78,10 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+      },
+      boxShadow: {
+        "custom-light": "0px 4px 26px -4px #4AC97E29",
+        "custom-dark": "0px 10px 45px -3px #4AC97E4D",
       },
     },
   },

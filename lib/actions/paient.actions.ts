@@ -18,7 +18,7 @@ import { InputFile } from "node-appwrite/file";
 export const createUser = async (user: CreateUserParams) => {
   try {
     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
-    const newuser = await users.create(
+    const newUser = await users.create(
       ID.unique(),
       user.email,
       user.phone,
@@ -26,7 +26,7 @@ export const createUser = async (user: CreateUserParams) => {
       user.name
     );
 
-    return parseStringify(newuser);
+    return parseStringify(newUser);
   } catch (error: any) {
     // Check existing user
     if (error && error?.code === 409) {
@@ -74,6 +74,20 @@ export const registerPatient = async ({
       }
     );
     return parseStringify(newPatient);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getPatient = async (userId: string) => {
+  try {
+    const patient = await databases.listDocuments(
+      DATABASE_ID!,
+      PATIENT_COLLECTION_ID!,
+      [Query.equal("userId", userId)]
+    );
+
+    return parseStringify(patient.documents[0]);
   } catch (error) {
     console.log(error);
   }

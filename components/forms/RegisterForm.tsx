@@ -21,10 +21,23 @@ import Image from "next/image";
 import FileUploader from "../FileUploader";
 import { cn } from "@/lib/utils";
 import { registerPatient } from "@/lib/actions/paient.actions";
-import { BUCKET_ID } from "@/lib/appwrite.config";
+
+type Field = "primaryPhysician" | "identificationType";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+
+  const handleValueChange = (field: Field, value: any) => {
+    if (field === "primaryPhysician") {
+      setSelectedDoctor(value);
+    } else if (field === "identificationType") {
+      setSelectedType(value);
+    }
+    return null;
+  };
+
   const router = useRouter();
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
@@ -217,16 +230,33 @@ const RegisterForm = ({ user }: { user: User }) => {
                   name="primaryPhysician"
                   lable="Primary physician"
                   placeholder="Select a Physician"
+                  handleValueChange={(value: any) =>
+                    handleValueChange("primaryPhysician", value)
+                  }
                 >
                   {Doctors.map((doctor) => (
                     <SelectItem
                       key={doctor.name}
                       value={doctor.name}
                       className={cn(
-                        "cursor-pointer rounded-md custom-gradient border border-dark-500"
+                        "cursor-pointer border border-dark-100 rounded-md",
+                        {
+                          "bg-select-gradient border-dark-500":
+                            selectedDoctor === doctor.name,
+                          "hover:bg-select-gradient hover:border-dark-500":
+                            selectedDoctor !== doctor.name,
+                        }
                       )}
                     >
-                      <div className="flex items-center gap-2 p-3 h-8 rounded-md border border-dark-500 custom-gradient">
+                      <div
+                        className={cn(
+                          "flex items-center gap-2 p-3 h-9 rounded-md",
+                          {
+                            "border border-dark-500 custom-gradient":
+                              selectedDoctor === doctor.name,
+                          }
+                        )}
+                      >
                         <Image
                           src={doctor.image}
                           alt={doctor.name}
@@ -299,12 +329,21 @@ const RegisterForm = ({ user }: { user: User }) => {
                 name="identificationType"
                 lable="Identification type"
                 placeholder="Select identification type"
+                handleValueChange={(value: any) =>
+                  handleValueChange("identificationType", value)
+                }
               >
                 {IdentificationTypes.map((type) => (
                   <SelectItem
                     key={type}
                     value={type}
-                    className="cursor-pointer hover:bg-dark-500 rounded"
+                    className={cn(
+                      "cursor-pointer hover:bg-select-gradient border border-transparent hover:border-dark-500 rounded",
+                      {
+                        "bg-select-gradient border-dark-500":
+                          selectedType === type,
+                      }
+                    )}
                   >
                     {type}
                   </SelectItem>

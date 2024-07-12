@@ -50,6 +50,7 @@ interface CustomProps {
   showTimeSelect?: boolean;
   children?: ReactNode;
   renderSkeleton?: (field: any) => ReactNode;
+  handleValueChange?: (value: any) => ReactNode;
 }
 
 const CustomFormField = (props: CustomProps) => {
@@ -66,6 +67,7 @@ const CustomFormField = (props: CustomProps) => {
     renderSkeleton,
     children,
     disabled,
+    handleValueChange = () => {},
   } = props;
 
   return (
@@ -103,8 +105,6 @@ const CustomFormField = (props: CustomProps) => {
                 defaultCountry="EG"
                 placeholder={placeholder}
                 international
-                withCountryCallingCode
-                value={field.value as E164Number | undefined}
                 onChange={field.onChange}
                 className="input-phone"
               />
@@ -143,7 +143,14 @@ const CustomFormField = (props: CustomProps) => {
 
           {fieldType === FormFieldType.SELECT && (
             <FormControl>
-              <Select onValueChange={field.onChange}>
+              <Select
+                onValueChange={(value) => {
+                  if (field?.onChange) {
+                    field.onChange(value);
+                  }
+                  handleValueChange(value); // Update local state for CSS class control
+                }}
+              >
                 <FormControl>
                   <SelectTrigger className="shad-select-trigger">
                     <SelectValue placeholder={placeholder} />
