@@ -56,7 +56,7 @@ const config = {
       backgroundImage: {
         appointments: "url('/assets/images/appointments-bg.png')",
         pending: "url('/assets/images/pending-bg.png')",
-        cancelled: "url('/assets/images/cancelled-bg.png')",
+        canceled: "url('/assets/images/canceled-bg.png')",
         "select-gradient":
           "linear-gradient(117.58deg, rgba(215, 237, 237, 0.16) -47.79%, rgba(204, 235, 235, 0) 100%)",
       },

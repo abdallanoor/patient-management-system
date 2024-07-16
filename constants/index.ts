@@ -16,7 +16,7 @@ export const PatientFormDefaultValues = {
   currentMedication: "",
   familyMedicalHistory: "",
   pastMedicalHistory: "",
-  identificationType: "Birth Certificate",
+  identificationType: "",
   identificationNumber: "",
   identificationDocument: [],
   treatmentConsent: false,
@@ -80,5 +80,5 @@ export const Doctors = [
 export const StatusIcon = {
   scheduled: "/assets/icons/check.svg",
   pending: "/assets/icons/pending.svg",
-  cancelled: "/assets/icons/cancelled.svg",
+  canceled: "/assets/icons/canceled.svg",
 };

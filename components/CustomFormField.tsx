@@ -18,7 +18,6 @@ import DatePicker from "react-datepicker";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -50,7 +49,6 @@ interface CustomProps {
   showTimeSelect?: boolean;
   children?: ReactNode;
   renderSkeleton?: (field: any) => ReactNode;
-  handleValueChange?: (value: any) => ReactNode;
 }
 
 const CustomFormField = (props: CustomProps) => {
@@ -67,7 +65,6 @@ const CustomFormField = (props: CustomProps) => {
     renderSkeleton,
     children,
     disabled,
-    handleValueChange = () => {},
   } = props;
 
   return (
@@ -143,14 +140,7 @@ const CustomFormField = (props: CustomProps) => {
 
           {fieldType === FormFieldType.SELECT && (
             <FormControl>
-              <Select
-                onValueChange={(value) => {
-                  if (field?.onChange) {
-                    field.onChange(value);
-                  }
-                  handleValueChange(value); // Update local state for CSS class control
-                }}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="shad-select-trigger">
                     <SelectValue placeholder={placeholder} />

@@ -89,7 +89,7 @@
 
   /* ===== ADMIN */
   .admin-header {
-    @apply sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl bg-dark-200 px-[5%] py-5 shadow-lg xl:px-12;
+    @apply sticky top-3 z-20 mx-3 flex items-center justify-between rounded-2xl bg-dark-200/90 backdrop-blur px-[5%] py-5 shadow-lg xl:px-12;
   }
 
   .admin-main {
@@ -197,7 +197,7 @@
   }
 
   .shad-gray-btn {
-    @apply border border-dark-500 cursor-pointer bg-dark-400 text-white !important;
+    @apply border border-dark-500 cursor-pointer bg-dark-400 text-white px-2 !important;
   }
 
   .shad-input-label {
@@ -355,7 +355,3 @@
   color: #1a1d21;
 }
 
-.custom-gradient {
-  background: linear-gradient(117.58deg, rgba(215, 237, 237, 0.16) -47.79%, rgba(204, 235, 235, 0) 100%);
-
-}

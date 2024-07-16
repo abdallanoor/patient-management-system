@@ -7,58 +7,65 @@ import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
-import { CreateAppointmentSchema } from "@/lib/validation";
+import { getAppointmentSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { Doctors } from "@/constants";
 import { SelectItem } from "../ui/select";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { createAppointment } from "@/lib/actions/appointment.actions";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/types/appwrite.types";
+import { Button } from "../ui/button";
+import Loading from "@/app/loading";
 
 const AppointmentForm = ({
   patientId,
   userId,
-  type,
+  type = "create",
+  appointment,
+  setOpen,
 }: {
   patientId: string;
   userId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+  setOpen?: (open: boolean) => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(null);
-
-  const handleValueChange = (value: any) => {
-    setSelectedValue(value);
-    return null;
-  };
 
   const router = useRouter();
-  const form = useForm<z.infer<typeof CreateAppointmentSchema>>({
-    resolver: zodResolver(CreateAppointmentSchema),
+  const AppointmentFormValidation = getAppointmentSchema(type);
+  const form = useForm<z.infer<typeof AppointmentFormValidation>>({
+    resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: "",
-      schedule: new Date(),
-      reason: "",
-      note: "",
-      cancellationReason: "",
+      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
+      schedule: appointment
+        ? new Date(appointment?.schedule!)
+        : new Date(Date.now()),
+      reason: appointment ? appointment?.reason : "",
+      note: appointment?.note || "",
+      cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof CreateAppointmentSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof AppointmentFormValidation>
+  ) => {
     setIsLoading(true);
-
     let status;
     switch (type) {
       case "schedule":
         status = "scheduled";
+        break;
       case "cancel":
         status = "canceled";
         break;
       default:
         status = "pending";
-        break;
     }
-
     if (type === "create" && patientId) {
       const appointmentData = {
         userId,
@@ -66,19 +73,35 @@ const AppointmentForm = ({
         schedule: new Date(values.schedule),
         status: status as Status,
         primaryPhysician: values.primaryPhysician,
-        reason: values.reason,
+        reason: values.reason!,
         note: values.note,
       };
       const appointment = await createAppointment(appointmentData);
-
       if (appointment) {
         form.reset();
         router.push(
           `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
         );
       }
-    }
+    } else {
+      const appointmentToUpdate = {
+        userId,
+        appointmentId: appointment?.$id!,
+        appointment: {
+          primaryPhysician: values?.primaryPhysician,
+          schedule: new Date(values?.schedule),
+          status: status as Status,
+          cancellationReason: values?.cancellationReason,
+        },
+        type,
+      };
 
+      const update = await updateAppointment(appointmentToUpdate);
+      if (update) {
+        setOpen && setOpen(false);
+        form.reset();
+      }
+    }
     try {
     } catch (error) {
       console.log(error);
@@ -91,13 +114,13 @@ const AppointmentForm = ({
   switch (type) {
     case "create":
       btnLabel = "Create Appointment";
+      break;
     case "cancel":
       btnLabel = "Cancel Appointment";
-
+      break;
     case "schedule":
       btnLabel = "Schedule Appointment";
       break;
-
     default:
       break;
   }
@@ -105,12 +128,14 @@ const AppointmentForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-9 flex-1">
-        <section className="mb-12 space-y-2">
-          <h1 className="header">New Appointment</h1>
-          <p className="dark:text-dark-700">
-            Request a new appointment in 10 seconds.
-          </p>
-        </section>
+        {type === "create" && (
+          <section className="mb-12 space-y-2">
+            <h1 className="header">New Appointment</h1>
+            <p className="dark:text-dark-700">
+              Request a new appointment in 10 seconds.
+            </p>
+          </section>
+        )}
         <section className="flex flex-col gap-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {type !== "cancel" && (
@@ -122,24 +147,14 @@ const AppointmentForm = ({
                     name="primaryPhysician"
                     lable="Doctor"
                     placeholder="Select a Doctor"
-                    handleValueChange={handleValueChange}
                   >
                     {Doctors.map((doctor) => (
                       <SelectItem
                         key={doctor.name}
                         value={doctor.name}
-                        className={`cursor-pointer border border-dark-100 rounded-md ${
-                          selectedValue === doctor.name
-                            ? "bg-select-gradient  border-dark-500"
-                            : "hover:bg-select-gradient hover:border-dark-500"
-                        }`}
+                        className="cursor-pointer border border-dark-100 hover:bg-select-gradient hover:border-dark-500 rounded-md data-[state=checked]:bg-select-gradient data-[state=checked]:border-dark-500"
                       >
-                        <div
-                          className={`flex items-center gap-2 p-3 h-9 rounded-md ${
-                            selectedValue === doctor.name &&
-                            "border border-dark-500 custom-gradient"
-                          }`}
-                        >
+                        <div className="flex cursor-pointer items-center gap-2">
                           <Image
                             src={doctor.image}
                             alt={doctor.name}
