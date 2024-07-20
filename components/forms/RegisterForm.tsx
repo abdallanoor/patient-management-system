@@ -19,12 +19,18 @@ import {
 } from "@/constants";
 import Image from "next/image";
 import FileUploader from "../FileUploader";
-import { cn } from "@/lib/utils";
 import { registerPatient } from "@/lib/actions/paient.actions";
+import { toast } from "../ui/use-toast";
 
 type Field = "primaryPhysician" | "identificationType";
 
-const RegisterForm = ({ user }: { user: User }) => {
+const RegisterForm = ({
+  user,
+  patient,
+}: {
+  user: User;
+  patient: RegisterUserParams;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -32,6 +38,25 @@ const RegisterForm = ({ user }: { user: User }) => {
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
+      birthDate: patient ? new Date(patient?.birthDate!) : new Date(Date.now()),
+      gender: patient ? patient?.gender : ("male" as Gender),
+      address: patient ? patient?.address : "",
+      occupation: patient ? patient?.occupation : "",
+      emergencyContactName: patient ? patient?.emergencyContactName : "",
+      emergencyContactNumber: patient ? patient?.emergencyContactNumber : "",
+      primaryPhysician: patient ? patient?.primaryPhysician : "",
+      insuranceProvider: patient ? patient?.insuranceProvider : "",
+      insurancePolicyNumber: patient ? patient?.insurancePolicyNumber : "",
+      allergies: patient?.allergies || "",
+      currentMedication: patient?.currentMedication || "",
+      familyMedicalHistory: patient?.familyMedicalHistory || "",
+      pastMedicalHistory: patient?.pastMedicalHistory || "",
+      identificationType: patient ? patient?.identificationType : "",
+      identificationNumber: patient ? patient?.identificationNumber : "",
+      identificationDocument: [],
+      treatmentConsent: patient ? patient.treatmentConsent : false,
+      disclosureConsent: patient ? patient.disclosureConsent : false,
+      privacyConsent: patient ? patient.privacyConsent : false,
       name: user.name,
       email: user.email,
       phone: user.phone,
@@ -88,6 +113,10 @@ const RegisterForm = ({ user }: { user: User }) => {
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
+        toast({
+          title: "Patient Registration Successful",
+          description: "Waiting for make appointment",
+        });
       }
     } catch (error) {
       console.log(error);

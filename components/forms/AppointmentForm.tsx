@@ -20,6 +20,7 @@ import {
 import { Appointment } from "@/types/appwrite.types";
 import { Button } from "../ui/button";
 import Loading from "@/app/loading";
+import { toast } from "../ui/use-toast";
 
 const AppointmentForm = ({
   patientId,
@@ -78,6 +79,9 @@ const AppointmentForm = ({
       };
       const appointment = await createAppointment(appointmentData);
       if (appointment) {
+        toast({
+          title: "Appointment successfully created",
+        });
         form.reset();
         router.push(
           `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
@@ -98,6 +102,9 @@ const AppointmentForm = ({
 
       const update = await updateAppointment(appointmentToUpdate);
       if (update) {
+        toast({
+          title: "Appointment successfully updated",
+        });
         setOpen && setOpen(false);
         form.reset();
       }

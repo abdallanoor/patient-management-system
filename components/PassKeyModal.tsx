@@ -2,7 +2,6 @@
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -16,10 +15,10 @@ import React, { useEffect, useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { decryptKey, encryptKey } from "@/lib/utils";
+import { toast } from "./ui/use-toast";
 
 const PassKeyModal = () => {
   const [open, setOpen] = useState(true);
@@ -43,6 +42,9 @@ const PassKeyModal = () => {
     if (path) {
       if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
         setOpen(false);
+        toast({
+          title: "Logged in successfully",
+        });
         router.push("/admin");
       } else {
         setOpen(true);
@@ -75,7 +77,8 @@ const PassKeyModal = () => {
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            To access the admin page, please enter the passkey.....
+            To access the admin page, please enter the passkey "111111" for
+            testing.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div>

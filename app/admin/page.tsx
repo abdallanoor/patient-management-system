@@ -1,3 +1,4 @@
+import LogoutModal from "@/components/LogoutModal";
 import StatCard from "@/components/StatCard";
 import columns from "@/components/table/columns";
 import DataTable from "@/components/table/DataTable";
@@ -20,16 +21,7 @@ const Admin = async () => {
             className="h-8 w-fit"
           />
         </Link>
-        <div className="flex items-center gap-2">
-          {/* <Image
-            src="/assets/images/dr-remirez.png"
-            alt="logo"
-            width={23}
-            height={23}
-            className="h-8 w-8"
-          /> */}
-          <p>Admin Dashboard</p>
-        </div>
+        <LogoutModal />
       </div>
       <main className="admin-main">
         <section className="space-y-4 w-full">

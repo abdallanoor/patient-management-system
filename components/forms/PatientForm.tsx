@@ -10,6 +10,7 @@ import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/paient.actions";
+import { toast } from "../ui/use-toast";
 
 const PatientForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,10 @@ const PatientForm = () => {
       const newUser = await createUser(user);
 
       if (newUser) {
+        toast({
+          title: "User created",
+          description: `Hello ${newUser?.name}`,
+        });
         router.push(`/patients/${newUser.$id}/register`);
       }
     } catch (error) {

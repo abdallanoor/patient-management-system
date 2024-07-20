@@ -18,8 +18,8 @@ const Success = async ({
     (doc) => doc.name === appointment?.primaryPhysician
   );
 
-  const user = await getUser(userId);
-  Sentry.metrics.set("user_view_appointment-success", user.name);
+  // const user = await getUser(userId);
+  // Sentry.metrics.set("user_view_appointment-success", user.name);
 
   return (
     <div className="flex h-screen max-h-screen px-[5%]">

@@ -104,6 +104,7 @@ const CustomFormField = (props: CustomProps) => {
                 international
                 onChange={field.onChange}
                 className="input-phone"
+                value={field.value}
               />
             </FormControl>
           )}
@@ -161,6 +162,7 @@ const CustomFormField = (props: CustomProps) => {
                 {...field}
                 className="shad-textArea"
                 disabled={disabled}
+                // value={field.value}
               />
             </FormControl>
           )}
