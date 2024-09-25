@@ -367,7 +367,7 @@ const RegisterForm = ({
             </div>
           </div>
 
-          <div className="space-y-8">
+          {/* <div className="space-y-8">
             <h2 className="sub-header">Consent and Privacy</h2>
             <div className="grid grid-cols-1 gap-5">
               <CustomFormField
@@ -389,7 +389,7 @@ const RegisterForm = ({
                 lable="I consent to privacy policy"
               />
             </div>
-          </div>
+          </div> */}
         </section>
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
